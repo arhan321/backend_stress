@@ -1,0 +1,16 @@
+flask
+flask-cors
+sqlalchemy
+pymysql
+bcrypt
+pandas
+numpy
+loguru
+mysql-connector-python
+python-dotenv
+tensorflow
+scikit-learn
+torch
+torchvision
+torchaudio
+PyJWT

@@ -1,0 +1,56 @@
+version: "3.9"
+
+services:
+  flask-app:
+    build:
+      context: .                  # direktori tempat Dockerfile berada
+      dockerfile: Dockerfile
+    container_name: flask_app
+    environment:
+      # Environment variables for Flask app
+      FLASK_ENV: development
+      SECRET_KEY: your-secret-key-here-change-in-production
+      JWT_SECRET_KEY: your-jwt-secret-key-change-in-production
+      JWT_ACCESS_TOKEN_EXPIRES: 3600
+
+      # Database configuration (override localhost)
+      MYSQL_HOST: db
+      MYSQL_PORT: 3306
+      MYSQL_USER: root
+      MYSQL_PASSWORD: 123
+      MYSQL_DATABASE: stress_analysis
+
+      # App-specific settings
+      UPLOAD_FOLDER: uploads
+      MAX_CONTENT_LENGTH: 16777216
+      LOG_LEVEL: INFO
+      COL_LMS: LMSLogin
+      COL_GRADE: TaskScore
+
+    ports:
+      - "80:5000"                 # host:container → http://localhost/
+    volumes:
+      - ./app:/app                # hot reload & access to CSV and code
+    depends_on:
+      - db                        # wait for DB
+    restart: unless-stopped
+
+  db:
+    image: mariadb:10.2
+    container_name: db
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "13306:3306"
+    volumes:
+      - ./database/data:/var/lib/mysql
+      - ./database/conf.d:/etc/mysql/conf.d:ro
+    environment:
+      MYSQL_USER: root
+      MYSQL_PASSWORD: 123
+      MYSQL_ROOT_PASSWORD: 123
+      MYSQL_DATABASE: stress_analysis
+      TZ: Asia/Jakarta
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
+    read_only: false
