@@ -28,7 +28,7 @@ services:
       COL_GRADE: TaskScore
 
     ports:
-      - "80:5000"                 # host:container → http://localhost/
+      - "5000:5000"                # host:container → http://localhost/
     volumes:
       - ./app:/app                # hot reload & access to CSV and code
     depends_on:
