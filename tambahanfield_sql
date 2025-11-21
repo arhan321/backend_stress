@@ -1,0 +1,5 @@
+ALTER TABLE datasets
+ADD COLUMN uploaded_by INT NULL AFTER error_message,
+ADD CONSTRAINT fk_dataset_user
+FOREIGN KEY (uploaded_by) REFERENCES users(id)
+ON DELETE SET NULL ON UPDATE RESTRICT;
